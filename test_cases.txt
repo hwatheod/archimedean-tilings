@@ -1,0 +1,68 @@
+# Test cases from Chapter 19 of _Symmetries of Things_.
+# First table on p.259
+<0>*     a         *na2
+(0).     a         na2
+[0].     2a        n*a
+(0)*     2a,2a     2*na  # error in table (2a)^n (compare to p.250 diagram, case a=2, n=2)
+[0]*     a,b       *nab
+<0><1>*  2a,2a     *n2a2 # error in table (2a)^n (compare to p.250 diagram, case a=2, n=2)
+<0,1>*   a,a       a*n   # error in table a^n    (compare to p.250 diagram, case a=4, n=2)
+<0>(1)*  3a,3a,3a  2*na2 # error in table (3a)^n
+<0>[1]*  2a,b,2a   *n2ab
+
+# Second table on p.259
+(0)[1]*     3a,b,3a,3a      2*nab  # normalization error in table (3a,3a,b,3a)
+[0][1]*     2b,c,2b,a       *nabc  # normalization error in table (a,2b,c,2b)
+<0>[1]<2>*  2a,2b,2b,2a     *n2ab2
+<0>(1)[2]*  4a,4a,b,4a,4a   2*n2ab
+<0>[1](2)*  2a,3b,3b,3b,2a  2*n2ab
+<0>[1][2]*  2a,2b,c,2b,2a   *n2abc
+<0>(1,2)*   3a,b,3a,b,3a    b*n2a  # Error in table (3b,2a,3b,3b,2a) this is exactly the case on p. 252.
+
+# Table on p.260
+[0][1][2].        2a,2b,2c
+[0](1)(2,3).      6a,6a,b,6a
+[0][1][2][3].     2a,2b,2c,2d
+[0][1][2](3).     2a,2b,4c,4c
+[0][1,2](3,4).    8a,8a,8a,b,8a
+[0](1,2)(3,4).    6a,b,6a,c,6a
+(0)[1,2](3,4).    4a,4a,4a,b,4a
+(0)(1,2)(3,4).    3a,b,3a,c,3a
+[0][1][2][3,4].   2a,2b,6c,6c,6c
+[0][1][2](3,4).   2a,2b,4c,d,4c
+[0][1](2)[3,4].   2a,8b,8b,8b,8b
+[0][1](2)(3,4).   2a,6b,6b,c,6b
+[0][1][3][2,4].   2a,4b,4c,4b,4c
+[0](1)(2)(3,4).   8a,8a,8a,b,8a
+[0](1)[3][2,4].   6a,6a,4b,6a,4b
+[0](1)[3](2,4).   6a,6a,4b,4b,6a
+[0](1)(3)(2,4).   6a,6a,2b,2b,6a
+[0][1][2][3][4].  2a,2b,2c,2d,2e  n*abcde
+[0][1][2][3](4).  2a,2b,2c,4d,4d
+[0][1][2](3)(4).  2a,2b,6c,6c,6c
+[0][1](2)[3](4).  2a,4b,4b,4c,4c
+
+# Examples on p. 264-266 not already duplicated above
+(0)(1,2)[3].      6a,b,6a,6a  # example 4
+(0)(1,2)[3,4].    4a,b,4a,4a,4a  # example 9 (error in text)
+(0)[1][2](3,4).   6a,2b,6a,c,6a  # example 10
+
+# Tests with handles and crosscaps
+(0,2)(1,3).       4a,4a,4a,4a    oan
+[0,2](1,3).       4a,4a,4a,4a    anxx
+[0,2][1][3].      4a,4b,4a,4b    n*abx
+[0,1]*            4a,4a,4a,4a    *anx
+[0,1](2)(3).      4a,4a,4a,4a    22anx
+[0,1][2,3].       4a,4a,4a,4a    anxx
+[0,1][2,3][4,5].  (6a)^6         oanx
+
+# More crosscap tests from SoT Chapter 19
+[0](1,2)[3,4].             8b,a,8b,8b,8b                an*bx       # p. 254
+<0,8>(1)[2,6](3,4)(5,7)*   (7a)^3,b,(7a)^8,b,(7a)^3     2ab*nxx     # p. 255
+
+# Multiple kaleidoscopes
+<0,2>[1]*         4a,4a,4a,4a    *a*n
+(0,2)[1][3].      4a,4a,4b,4b    n*a*b
+
+# Multiple handles
+(0,2)(1,3)(4,6)(5,7)(8,10)(9,11).  (12a)^12   oooan

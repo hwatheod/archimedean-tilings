@@ -1,0 +1,107 @@
+Suppose the edges mentioned in the permutation symbol are 0, 1, ..., m-1.
+
+Constraints on the permutation symbol
+1. There cannot be both a half arm and a half band
+2. There can be at most 2 half arms and 1 half band
+3. If there is a half arm or a half band, the local symmetry must be *.
+4. Half arms must be 0 and/or m-1.
+5. Half band must join 0 and m-1.
+
+We assume below that if there is a single half arm, it is 0.
+
+Edge lines
+
+Each integer i has an upper and a lower edge line, except:
+- if there is a half band, or a half arm at 0, there is an upper edge only at 0.
+- if there is a half band, or a half arm at m-1, there is a lower edge only at m-1.
+
+Edge lines consist of the upper and lower edge lines defined above, plus:
+- if there is a single half-arm at 0, then there is only an upper boundary edgeline.
+- if there is no half-arm or half band, but the local symmetry is *, then there is an lower and an upper boundary
+  edgeline.
+
+For a given edgeline, the *connected edgeline* is defined as follows according to the type of edge i:
+- boundary edgelines: undefined.
+- rotary arm (i): i upper <-> i lower.
+- untwisted band (ij): i upper <-> j lower, j upper <-> i lower.
+- twisted band [ij]: i upper <-> j upper, i lower <-> j lower.
+- half band <ij>: 0 upper <-> m-1 lower.
+- folded band or half arm, undefined.
+
+For a given edgeline, the *adjacent edgeline* is defined as follows:
+- lower boundary edgeline <-> 0 lower (which must exist if the lower boundary edgeline exists)
+- upper boundary edgeline <-> m-1 upper (which must exist if the upper boundary edgeline exists)
+- else:
+     i upper <-> i+1 lower, taken mod n, EXCEPT if there is a boundary edgeline in which case use the above rules
+     for 0 lower and m-1 upper.
+
+If edge i is a half arm or a folded band, we say that the upper and lower edge line of edge i (if they exist)
+  *meet the boundary*.  We also say that the boundary edgelines, if any, meet the boundary.
+
+Given an edgeline that meets the boundary, the *touching boundary edgeline* is defined as follows:
+- if edge i is a folded band, then i upper <-> i lower.
+- if there are no half arms, then upper boundary line <-> lower boundary line.
+- if there is only one half arm, then upper boundary line <-> 0 upper.
+- if there are two half arms, then m-1 lower <-> 0 upper.
+
+Determining the orbifold faces
+
+An orbifold face will be expressed as a sequence of edgelines.
+
+The fundamental iteration:
+  Let e be the last edgeline in the orbifold face.
+  Let e' be the connected edgeline of e.  If there is no connected edgeline, or e' is already in the face, then stop;
+     otherwise, append e' to the orbifold face.
+  Let e'' be the adjacent edgeline to e'.  If there is no adjacent edgeline, then stop, else append e'' to the orbifold face.
+  
+If there are any edgelines which meet the boundary, then find the boundary components as follows:
+  1. Start a new orbifold face with an unused edgeline e which meets the boundary.
+  2. Append the adjacent edgeline of e.  
+  3. Repeat the fundamental iteration until it stops at some edge e'.  Append this sequence of edgelines as a face
+     to the current boundary component.
+  4. Let e'' be the touching boundary edgeline e'.  If e'' is already in a face, then this boundary component is
+     complete.  Otherwise repeat steps 2-3 starting with e'', for the next face in the same boundary component.
+  5. Repeat steps 1-4 for the next boundary component, until there are no more unused edgelines that meet the boundary.
+
+If there is a half-band, then append an empty boundary component.  The half-band is a boundary component that
+ meets no face.
+
+Find the interior faces as follows:
+  1. Start a new orbifold face with an arbitrary edgeline not meeting the boundary.
+  2. Repeat the fundamental iteration until it stops.  This completes the face.
+  3. Repeat steps 1-2 until all edgelines are used.
+
+Parameters for orbifold faces
+  If an orbifold face has an edgeline which meets the boundary, then its parameter b is a reflection *b on that boundary line.
+  Otherwise, its parameter b is a gyration b within the face.
+
+Overall vertex parameter
+  There is an overall gyration n or reflection *n assigned to the vertex, according to the local symmetry in the
+  permutation symbol.
+
+Determining the face code:
+  First, we construct a map of "adjacent edgeline pairs" to number of sides, as follows.
+    Given an adjacent edgeline pair, find the unique orbifold face that contains this adjacent edgeline pair.  (Include the
+      wraparound from last to first, if the orbifold face did not terminate on the boundary.)
+    The number of sides is equal to the half the number of non-boundary edgelines (which can only occur at the ends of the face),
+      multiplied by the parameter 2b for a boundary face, or multiplied by b for a non-boundary face.
+  Next, arrange the adjacent edgeline pairs "in order" and list the corresponding number of sides to obtain a vector F.
+  Then make the following adjustments:
+  - If there is a half band or two half-arms, then append to F, the vector reverse(F).
+  - If there are boundary edgelines, then append to F the reverse of all elements of F corresponding to non-boundary edgelines.
+  Then concatenate F to itself n times (the overall vertex parameter).
+
+Determining the gyrational components of the Conway signature:
+  There is 2 for each rotary arm.
+  There is a parameter for each non-boundary face.
+  If the local symmetry is rotational, then append the overall vertex parameter n.
+
+Determining the reflection components of the Conway signature:
+  For each boundary component, write down (in order) all the reflection parameters on the boundary.
+  If 0 is a half-arm, prepend a 2 to the parameter for that edge.
+  If m-1 is a half-arm, append a 2 to the parameter for the edge.
+  If the local symmetry is dihedral, append the overall vertex parameter n to the boundary component containing
+     the upper boundary line.  If there is a half-band, this will be the empty boundary component.
+
+Determining the handles and twist components of the Conway signature:
+  (Note: xxx = ox)
