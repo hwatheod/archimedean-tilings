@@ -171,7 +171,7 @@ class Face:
             sides = half_sides  # reflection multiplies by 2
         else:
             assert half_sides % 2 == 0
-            sides = half_sides / 2
+            sides = half_sides // 2
         return sides
 
 
@@ -198,16 +198,17 @@ class Orbifold:
             Kaleidoscopes: all 1's removed.
             Handles and crosscaps: Crosscaps = 0,1,or 2; and number of handles increased accordingly.
         """
-        self.gyrations = sorted([x for x in gyrations if x != 1])
+        self.gyrations = sorted([x for x in gyrations if x != 1],
+                                key=lambda y: (0, y) if isinstance(y, int) else (1, y))  # rotation 2's come first
         self.kaleidoscopes = [[x for x in k if x != 1] for k in kaleidoscopes]
         self.handles = handles
         self.crosscaps = crosscaps
         if self.crosscaps > 2:
             if self.crosscaps % 2 == 1:
-                self.handles += (self.crosscaps - 1) / 2
+                self.handles += (self.crosscaps - 1) // 2
                 self.crosscaps = 1
             else:
-                self.handles += (self.crosscaps - 2) / 2
+                self.handles += (self.crosscaps - 2) // 2
                 self.crosscaps = 2
 
     def __repr__(self):
@@ -246,7 +247,7 @@ class Orbifold:
             return 2
 
         same_orientation = False
-        for i in xrange(len(k2)):
+        for i in range(len(k2)):
             if k1 == k2:
                 same_orientation = True
                 break
@@ -254,7 +255,7 @@ class Orbifold:
 
         k2_reversed = [x for x in reversed(k2)]
         opposite_orientation = False
-        for i in xrange(len(k2_reversed)):
+        for i in range(len(k2_reversed)):
             if k1 == k2_reversed:
                 opposite_orientation = True
                 break
@@ -280,7 +281,7 @@ class Orbifold:
         if len(self.kaleidoscopes) != len(other.kaleidoscopes):
             return False
 
-        matched_other_indices = range(len(other.kaleidoscopes))
+        matched_other_indices = list(range(len(other.kaleidoscopes)))
         self_index = 0
         matching_orientation = 0
         while matched_other_indices:
@@ -401,7 +402,7 @@ class PermutationSymbol:
             self.local_symmetry = Location.BOUNDARY
 
         self.edges = []
-        for i in xrange(max_number + 1):
+        for i in range(max_number + 1):
             if i not in edge_dict:
                 raise ValueError('Edge number %d missing from permutation symbol %s' % (i, symbol_string))
             self.edges.append(edge_dict[i])
@@ -464,7 +465,7 @@ class PermutationSymbol:
 
         if self.has_lower_boundary_edgeline():
             all_edgelines.append(EdgeLine(None, EdgeLineSide.LOWER, self))
-        for i in xrange(self.num_edges):
+        for i in range(self.num_edges):
             if 0 < i < self.num_edges - 1:
                 all_edgelines.append(EdgeLine(i, EdgeLineSide.LOWER, self))
                 all_edgelines.append(EdgeLine(i, EdgeLineSide.UPPER, self))
@@ -661,20 +662,20 @@ class PermutationSymbol:
 
         double_euler_characteristic = orbifold_half_vertices - orbifold_half_edges + 2 * orbifold_faces
         assert double_euler_characteristic % 2 == 0
-        euler_characteristic = double_euler_characteristic / 2
+        euler_characteristic = double_euler_characteristic // 2
         assert euler_characteristic <= 2
         s = 2 - euler_characteristic - orbifold_boundaries
         if self.is_orientable:
             assert s % 2 == 0 and s >= 0
-            handles = s/2
+            handles = s // 2
             crosscaps = 0
         else:  # non-orientable
             assert s > 0
             if s % 2 == 0:
-                handles = (s-2)/2
+                handles = (s-2) // 2
                 crosscaps = 2
             else:
-                handles = (s-1)/2
+                handles = (s-1) // 2
                 crosscaps = 1
 
         return Orbifold(gyrations, kaleidoscopes, handles, crosscaps)

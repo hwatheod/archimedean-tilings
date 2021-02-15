@@ -293,12 +293,13 @@ def generate_permutation_symbol_test(symbol_string, correct_facecode_string, cor
         if correct_orbifold_string:
             correct_orbifold = self.parse_orbifold(correct_orbifold_string)
             orbifold_normalization_map_ps = {}
-            for k, v in normalization_map_ps.iteritems():  # because (3,1) in the face code becomes '[1]' in orbifold
+            for k, v in normalization_map_ps.items():  # because (3,1) in the face code becomes '[1]' in orbifold
                 orbifold_normalization_map_ps['[%s]' % k] = v
             normalized_orbifold_ps = self.normalize_orbifold_parameters(ps.orbifold, orbifold_normalization_map_ps)
             normalized_orbifold_correct = self.normalize_orbifold_parameters(correct_orbifold, normalization_map_correct)
             self.assertEqual(normalized_orbifold_ps, normalized_orbifold_correct)
     return test
+
 
 if __name__ == '__main__':
     f = open('test_cases.txt')
